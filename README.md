@@ -1,6 +1,6 @@
 # HSK Analysis of Chinese text
 
-Shiny app programmed in R that matches text input Hanyu Shuiping Kaoshi (HSK) Chinese Proficiency Exam vocabulary by levels.
+Shiny app programmed in R that matches tokens from text input to Hanyu Shuiping Kaoshi (HSK) Chinese Proficiency Exam vocabulary by levels.
 
 To use:
 1. Access the app at https://siviyu.shinyapps.io/hsk-analysis/
