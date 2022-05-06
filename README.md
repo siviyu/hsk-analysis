@@ -2,13 +2,18 @@
 
 Shiny app programmed in R that matches tokens from text input to Hanyu Shuiping Kaoshi (HSK) Chinese Proficiency Exam vocabulary.
 
-Please contact me if you have any feedback and enjoy! :)
+Please contact me if you have any feedback. Enjoy! :)
+
+### Quickstart:
+1. Clone this repo. Specifically, you only need the three files in the 'app' folder (ui.R, server.R, and hsk_vocab.Rds).
+2. Open the project in RStudio.
+3. Run the Shiny app.
 
 ### Reproduce the app:
 1. Retrieve HSK vocabulary lists that that associates Chinese words/characters to the appropriate HSK level. The code for data wrangling can be found in text-handling.Rmd.
 2. Define app UI:
      - Allow user to input text. 
-     - When 'Analyze' button is clicked and the text input contains Chinese characters, display histogram and frequency table.
+     - When the 'Analyze' button is clicked and the text input contains Chinese characters, display histogram and frequency table.
 3. Define app server logic:
      - Retrieve user input.
      - Clean user input with regular expression that removes all non-Chinese characters.
