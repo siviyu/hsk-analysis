@@ -1,4 +1,4 @@
-# HSK Analysis of Chinese text
+# HSK Analysis of Chinese Text
 
 Shiny app programmed in R that matches tokens from text input to Hanyu Shuiping Kaoshi (HSK) Chinese Proficiency Exam vocabulary.
 
