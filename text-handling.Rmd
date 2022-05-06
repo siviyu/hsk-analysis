@@ -1,0 +1,77 @@
+---
+title: "Chinese Text Handling for HSK Analysis"
+author: "Sivian Yu"
+#output: html_notebook
+---
+
+Load packages
+```{r}
+library(readr)
+library(dplyr)
+library(tidytext)
+library(quanteda)
+library(jiebaR)
+library(stringi)
+library(ggplot2)
+```
+
+Get HSK vocabulary (2018) / credits to plaktos on github
+**Only in Simplified Chinese
+
+```{r}
+for (i in 1:6) { 
+  hski <- paste("hsk", i, sep="")
+  hskurl <- paste("https://raw.githubusercontent.com/plaktos/hsk_csv/master/", hski, ".csv", sep="")
+  assign(hski, read.csv(hskurl, header=FALSE, col.names=c("chinese", "pinyin", "english")) %>%
+           mutate(level = as.character(i)))
+}
+hsk <- bind_rows(hsk1, hsk2, hsk3, hsk4, hsk5, hsk6)
+hsk$level <- as.factor(hsk$level)
+#saveRDS(hsk, file="hsk_vocab.Rds")
+```
+
+Read text
+```{r}
+text <- readLines("example.txt", encoding="UTF-8")
+empty_text <- ""
+```
+
+Clean text (i.e. remove alphanumerics)
+```{r}
+clean_text <- function(text) {
+  alnum <- regex("[0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ]")
+  text <- str_replace_all(text, alnum, "")
+  return(text)
+}
+text <- clean_text(text)
+empty_text <- clean_text(empty_text)
+```
+
+Tokenize text
+Create word frequency table
+Left join HSK levels to word frequency table
+```{r}
+get_freq <- function(text) {
+  worker = worker()
+  text_seg = segment(text, jiebar=worker)
+  text_df <- as.data.frame(text_seg) 
+  
+  text_freq <- text_df %>%
+    group_by(text_seg) %>%
+    summarize(freq = n())
+  
+  text_freq <- text_freq %>%
+    left_join(hsk, by=c("text_seg" = "chinese"))
+  
+  return(text_freq)
+}
+text_freq <- get_freq(text)
+empty_text_freq <- get_freq(empty_text)
+```
+
+Graph HSK frequency
+```{r}
+ggplot(data=text_freq, aes(x=level)) + geom_bar(stat="count") + labs(title="HSK Vocabulary Frequency") + scale_x_discrete("HSK Level") + ylab("Count")
+#ggplot(data=text_freq, aes(x=level)) + geom_bar(stat="count") + labs(title="HSK Vocabulary Frequency") + scale_x_discrete("HSK Level") + ylab("Count") ---- produces error
+```
+
